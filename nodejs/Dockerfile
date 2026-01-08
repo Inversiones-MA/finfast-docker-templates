@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --only=production && \
+RUN npm ci --only=production --ignore-scripts && \
     npm cache clean --force
 
 FROM node:20-alpine AS runner
