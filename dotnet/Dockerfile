@@ -157,13 +157,11 @@ echo "=========================================="
 echo "Ejecutando dotnet restore..."
 echo "=========================================="
 
-# Restore: preferir solucion si existe, sino proyecto
-if [ -f /tmp/solution_file ]; then
-    SLN=$(cat /tmp/solution_file)
-    dotnet restore "$SLN" || dotnet restore "$CSPROJ_FILE"
-else
-    dotnet restore "$CSPROJ_FILE"
-fi
+# Restore: usar siempre el proyecto especifico
+# En monorepos, la solucion puede tener proyectos con dependencias no disponibles
+# Por lo tanto, restauramos solo el proyecto que necesitamos
+echo "Restaurando proyecto: $CSPROJ_FILE"
+dotnet restore "$CSPROJ_FILE"
 
 echo ""
 echo "=========================================="
