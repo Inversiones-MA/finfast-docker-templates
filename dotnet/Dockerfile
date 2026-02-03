@@ -34,6 +34,11 @@ ARG GIT_BRANCH=""
 
 WORKDIR /src
 
+# Configurar locale para UTF-8 (necesario para archivos con caracteres especiales)
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
 # Copiar todo el codigo fuente primero
 COPY . .
 
