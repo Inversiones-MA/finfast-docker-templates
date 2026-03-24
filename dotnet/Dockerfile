@@ -203,15 +203,15 @@ COPY --from=build /tmp/entry_dll /tmp/entry_dll
 
 # Variables de entorno
 ENV ASPNETCORE_ENVIRONMENT=Production \
-    ASPNETCORE_URLS=http://+:3000
+    ASPNETCORE_URLS=http://+:4000
 
 USER appuser
 
-EXPOSE 3000
+EXPOSE 4000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:3000/health || exit 1
+    CMD curl -f http://localhost:4000/health || exit 1
 
 # Entrypoint dinamico usando el DLL detectado
 ENTRYPOINT ["/bin/sh", "-c", "dotnet $(cat /tmp/entry_dll)"]
