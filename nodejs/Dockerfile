@@ -1,5 +1,7 @@
-# Multi-stage build para Express
-FROM node:20-alpine AS deps
+# Multi-stage build para Node.js
+# ACR_REGISTRY: si se pasa, usa imagenes base desde ACR (evita Docker Hub rate limits)
+ARG ACR_REGISTRY=docker.io/library
+FROM ${ACR_REGISTRY}/node:20-alpine AS deps
 
 WORKDIR /app
 
@@ -8,7 +10,7 @@ COPY package*.json ./
 RUN npm ci --only=production --ignore-scripts && \
     npm cache clean --force
 
-FROM node:20-alpine AS runner
+FROM ${ACR_REGISTRY}/node:20-alpine AS runner
 
 LABEL maintainer="devops@inversiones-ma.cl"
 LABEL project="FinFast"

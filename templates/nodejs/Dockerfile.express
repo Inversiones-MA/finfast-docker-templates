@@ -1,5 +1,6 @@
 # Multi-stage build para Express
-FROM node:20-alpine AS deps
+ARG ACR_REGISTRY=docker.io/library
+FROM ${ACR_REGISTRY}/node:20-alpine AS deps
 
 WORKDIR /app
 
@@ -8,7 +9,7 @@ COPY package*.json ./
 RUN npm ci --only=production && \
     npm cache clean --force
 
-FROM node:20-alpine AS runner
+FROM ${ACR_REGISTRY}/node:20-alpine AS runner
 
 LABEL maintainer="devops@inversiones-ma.cl"
 LABEL project="FinFast"

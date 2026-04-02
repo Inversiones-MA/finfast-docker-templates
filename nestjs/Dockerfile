@@ -1,8 +1,11 @@
 # Multi-stage build para NestJS
-# Optimizado para producción
+# Optimizado para produccion
+# ACR_REGISTRY: si se pasa, usa imagenes base desde ACR (evita Docker Hub rate limits)
+# Si no se pasa, usa docker.io/library como fallback (compatible con builds locales)
+ARG ACR_REGISTRY=docker.io/library
 
 # Stage 1: Dependencies
-FROM node:20-alpine AS deps
+FROM ${ACR_REGISTRY}/node:20-alpine AS deps
 
 WORKDIR /app
 
@@ -12,7 +15,7 @@ RUN npm ci --only=production --ignore-scripts && \
     npm cache clean --force
 
 # Stage 2: Builder
-FROM node:20-alpine AS builder
+FROM ${ACR_REGISTRY}/node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -24,7 +27,7 @@ COPY . .
 RUN npm run build
 
 # Stage 3: Runner
-FROM node:20-alpine AS runner
+FROM ${ACR_REGISTRY}/node:20-alpine AS runner
 
 LABEL maintainer="devops@inversiones-ma.cl"
 LABEL project="FinFast"

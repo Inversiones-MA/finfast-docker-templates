@@ -22,7 +22,10 @@
 #
 # =============================================================================
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# ACR_REGISTRY: si se pasa, usa imagenes base desde ACR (evita Docker Hub rate limits)
+# Para dotnet el default apunta a MCR (no tiene rate limit), pero ACR es mas rapido
+ARG ACR_REGISTRY=mcr.microsoft.com/dotnet
+FROM ${ACR_REGISTRY}/sdk:8.0 AS build
 
 # Build args con valores por defecto
 ARG PROJECT_PATH=""
@@ -183,7 +186,7 @@ RUN CSPROJ_FILE=$(cat /tmp/csproj_file) && \
     dotnet publish "$CSPROJ_FILE" -c Release -o /app/publish --no-restore /p:UseAppHost=false
 
 # Etapa final - imagen de runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM ${ACR_REGISTRY}/aspnet:8.0 AS final
 
 LABEL maintainer="devops@inversiones-ma.cl"
 LABEL project="FinFast"
