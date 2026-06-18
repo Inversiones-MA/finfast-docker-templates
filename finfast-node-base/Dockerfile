@@ -7,5 +7,5 @@ LABEL maintainer="devops@inversiones-ma.cl" project="FinFast" component="node-ba
 RUN apk add --no-cache dumb-init tini \
  && addgroup --system --gid 1001 nodejs \
  && adduser --system --uid 1001 nestjs
-ENV NODE_ENV=production
+# NOTA: NODE_ENV se setea en el stage RUNNER del servicio, NO en la base (si no, npm ci del builder omite devDeps -> build falla exit 127)
 ENTRYPOINT ["dumb-init","--"]
